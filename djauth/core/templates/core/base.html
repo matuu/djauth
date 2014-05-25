@@ -1,0 +1,97 @@
+{% load bootstrap3 %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head>
+    {# Load CSS and JavaScript #}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/mdialog.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-2.0.3.min.js" ></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/mdialog.js" ></script>
+    {% bootstrap_javascript %}
+    <title>{% block title %}·: Title :·{% endblock %} {% block subtitle %}{% endblock %}</title>
+</head>
+<body>
+    {% bootstrap_messages %}
+  <div class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/" class="navbar-brand">Nombre aplicación</a>
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+          </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Menú 1<span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="themes">
+                <li><a tabindex="-1" href="#">Item 1</a></li>
+                <li class="divider"></li>
+                <li><a tabindex="-1" href="#">Item 2</a></li>
+                <li><a tabindex="-1" href="#">Item 3</a></li>
+                <li><a tabindex="-1" href="#">Item 4</a></li>
+                <li><a tabindex="-1" href="#">Item 5</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="https://github.com/matuu/djauth">En Github!</a>
+            </li>
+          </ul>
+        <div class="nav navbar-nav navbar-right">
+            {% block header %}
+            {% if user.is_authenticated %}
+                <li><a href="#">¡ Hola<strong> {{ user.username }} </strong>!</a></li>
+                <li><a href="{% url 'auth_password_change' %}">Cambiar contraseña</a></li>
+                <li><a href="#" onclick="closeSession()">Cerrar sesión</a></li>
+            {% else %}
+
+         <form method="POST" action="{% url 'auth_login' %}" class="navbar-form form-horizontal">
+           {% csrf_token %}
+           <div class="row navbar-right">
+             <div class="col-xs-3  navbar-right">
+               <button type="submit" class="btn btn-default">Identificarse</button>
+             </div>
+              <div class="col-xs-3  navbar-right">
+               <input type="password" class="form-control" placeholder="Contraseña" id="id_password" name="password" tabindex="2">
+             </div>
+
+             <div class="col-xs-3  navbar-right">
+               <input type="text" class="form-control" placeholder="Usuario" id="id_username" name="username" tabindex="1">
+             </div>
+
+
+           </div>
+         </form>
+              {% endif %}
+            {% endblock %}
+
+       </div>
+
+
+        </div>
+      </div>
+    </div>
+  <div class="masthead">
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  
+  <div id="footer">
+    {% block footer %}{% endblock %}
+  </div>
+<script type="text/javascript">
+      function closeSession(){
+        new mDialogConfirm({
+            title: '¿Cerrar sesión?',
+            message: "Está a punto de cerrar la sesión. ¿Desea continuar?",
+            yes: function() { window.location = {% url 'auth_logout' %}; },
+            type: 'shutdown'
+        }).show();
+      }
+</script>
+{% block script_js %} {% endblock %}
+ <!-- Required for mDialog -->
+<div id="mdialog"></div>
+</body>
+</html>

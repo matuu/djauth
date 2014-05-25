@@ -1,0 +1,6 @@
+### base ###
+django<1.6
+
+### helpers ###
+django-bootstrap3
+django-admin-bootstrapped
